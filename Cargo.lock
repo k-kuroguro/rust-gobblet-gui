@@ -978,12 +978,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "gobblet"
+version = "0.1.0"
+
+[[package]]
 name = "gobblet_gui"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
  "eframe",
  "egui",
+ "gobblet",
  "tracing-wasm",
  "wasm-bindgen-futures",
 ]

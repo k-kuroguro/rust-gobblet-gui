@@ -3,7 +3,12 @@
 
 #[cfg(not(target_arch = "wasm32"))]
 fn main() -> eframe::Result<()> {
-   let native_options = eframe::NativeOptions::default();
+   use eframe::{NativeOptions, Theme};
+
+   let native_options = NativeOptions {
+      default_theme: Theme::Light,
+      ..NativeOptions::default()
+   };
    eframe::run_native(
       "Gobblet",
       native_options,

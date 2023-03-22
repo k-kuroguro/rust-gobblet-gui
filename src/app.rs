@@ -1,11 +1,19 @@
-use eframe::{CreationContext, Frame};
+use eframe::CreationContext;
 use egui::{CentralPanel, Context};
+use gobblet::{
+   game::{Action, Game},
+   square::Square,
+};
 
-pub struct App {}
+use crate::game_painter::GamePainter;
+
+pub struct App {
+   game: Game,
+}
 
 impl Default for App {
    fn default() -> Self {
-      Self {}
+      Self { game: Game::new() }
    }
 }
 
@@ -16,14 +24,14 @@ impl App {
 }
 
 impl eframe::App for App {
-   fn update(&mut self, ctx: &Context, _frame: &mut Frame) {
+   fn update(&mut self, ctx: &Context, _frame: &mut eframe::Frame) {
       CentralPanel::default().show(ctx, |ui| {
-         ui.heading("eframe template");
-         ui.hyperlink("https://github.com/emilk/eframe_template");
-         ui.add(egui::github_link_file!(
-            "https://github.com/emilk/eframe_template/blob/master/",
-            "Source code."
-         ));
+         let mut game = Game::new();
+         _ = game.execute(Action::PlaceFromHand {
+            index: 0,
+            to: Square::A1,
+         });
+         ui.add(GamePainter::new(&mut game, ui.available_size()));
       });
    }
 }
