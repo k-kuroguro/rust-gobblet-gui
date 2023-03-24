@@ -1,5 +1,5 @@
 use eframe::CreationContext;
-use egui::{CentralPanel, Context};
+use egui::{CentralPanel, Context, TopBottomPanel};
 use gobblet::{
    game::{Action, Game},
    square::Square,

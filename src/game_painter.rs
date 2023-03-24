@@ -38,15 +38,15 @@ impl Default for Style {
 
 pub struct GamePainter<'a> {
    game: &'a mut Game,
-   size: Vec2,
+   available_size: Vec2,
    style: Style,
 }
 
 impl<'a> GamePainter<'a> {
-   pub fn new(game: &'a mut Game, size: Vec2) -> Self {
+   pub fn new(game: &'a mut Game, available_size: Vec2) -> Self {
       Self {
          game,
-         size,
+         available_size,
          style: Style::default(),
       }
    }
@@ -54,27 +54,24 @@ impl<'a> GamePainter<'a> {
 
 impl Widget for GamePainter<'_> {
    fn ui(self, ui: &mut Ui) -> Response {
-      let (response, painter) = ui.allocate_painter(self.size, Sense::hover());
-      let square_size = (response.rect.height() / (BOARD_SIZE) as f32)
-         .min(response.rect.width() / (BOARD_SIZE + 2) as f32);
-      let board_size = square_size * BOARD_SIZE as f32;
+      let square_num = vec2(BOARD_SIZE as f32, BOARD_SIZE as f32 + 2.);
+      let square_size =
+         (self.available_size.y / square_num.y).min(self.available_size.x / square_num.x);
+      let (response, painter) = ui.allocate_painter(square_size * square_num, Sense::hover());
       let to_screen = RectTransform::from_to(
-         Rect::from_min_max(Pos2::ZERO, pos2(BOARD_SIZE as f32, BOARD_SIZE as f32)),
-         Rect::from_min_size(
-            pos2(square_size, response.rect.min.y),
-            vec2(board_size, board_size),
-         ),
+         Rect::from_min_max(Pos2::ZERO, square_num.to_pos2()),
+         response.rect,
       );
 
-      let mut shapes = Vec::with_capacity(2 * BOARD_SIZE.pow(2) + 2 * PIECE_SET_NUM);
+      let mut shapes = Vec::with_capacity(2 * (BOARD_SIZE.pow(2) + PIECE_SET_NUM));
 
       // Paint board.
       for x in 0..BOARD_SIZE {
          for y in 0..BOARD_SIZE {
             shapes.push(Shape::Rect(RectShape::filled(
                Rect::from_min_max(
-                  to_screen * pos2(x as f32, y as f32),
-                  to_screen * pos2(x as f32 + 1., y as f32 + 1.),
+                  to_screen * pos2(x as f32, y as f32 + 1.),
+                  to_screen * pos2(x as f32 + 1., y as f32 + 2.),
                ),
                Rounding::none(),
                if x % 2 == y % 2 {
@@ -90,7 +87,7 @@ impl Widget for GamePainter<'_> {
       for (i, set) in self.game.board().into_iter().enumerate() {
          if let Some(&Piece { color, kind }) = set.peek() {
             shapes.push(Shape::Circle(CircleShape {
-               center: to_screen * pos2((i % 4) as f32 + 0.5, (i / 4) as f32 + 0.5),
+               center: to_screen * pos2((i % 4) as f32 + 0.5, (i / 4) as f32 + 1.5),
                radius: 0.5 * self.style.piece_radius_ratio[kind as usize] * square_size,
                fill: self.style.piece_fill_color[color as usize],
                stroke: self.style.piece_stroke,
@@ -109,12 +106,8 @@ impl Widget for GamePainter<'_> {
                shapes.push(Shape::Circle(CircleShape {
                   center: to_screen
                      * pos2(
-                        if i == 0 {
-                           -0.5
-                        } else {
-                           BOARD_SIZE as f32 + 0.5
-                        },
-                        j as f32 + 0.5,
+                        j as f32 + 1.,
+                        if i == 0 { 0.5 } else { BOARD_SIZE as f32 + 1.5 },
                      ),
                   radius: 0.5 * self.style.piece_radius_ratio[kind as usize] * square_size,
                   fill: self.style.piece_fill_color[color as usize],
