@@ -9,10 +9,7 @@ rust-version = "1.65"
 [dependencies]
 egui = "0.21.0"
 eframe = "0.21.0"
-
-
-[dependencies.gobblet]
-path = "../rust-gobblet"
+gobblet = { git = "https://github.com/k-kuroguro/rust-gobblet.git" }
 
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
