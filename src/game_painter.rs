@@ -243,10 +243,7 @@ impl<'a> GamePainter<'a> {
 
    fn is_selected(&self, piece: LocatedPiece, selected_piece: Option<LocatedPiece>) -> bool {
       match selected_piece {
-         Some(LocatedPiece {
-            piece: selected_piece,
-            location: selected_location,
-         }) => selected_location == piece.location && selected_piece == piece.piece,
+         Some(selected_piece) => selected_piece == piece,
          None => false,
       }
    }
