@@ -1,10 +1,10 @@
 use egui::{Color32, Stroke};
-use gobblet::{color::Color, piece::PieceKind};
+use gobblet::{Color, Size};
 
 pub struct Style {
    pub light_square_color: Color32,
    pub dark_square_color: Color32,
-   pub piece_radius_ratio: [f32; PieceKind::NUM],
+   pub piece_radius_ratio: [f32; Size::NUM],
    pub piece_fill_color: [Color32; Color::NUM],
    pub piece_stroke: Stroke,
    pub selected_piece_stroke: Stroke,

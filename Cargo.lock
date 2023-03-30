@@ -1038,7 +1038,7 @@ dependencies = [
 [[package]]
 name = "gobblet"
 version = "0.1.0"
-source = "git+https://github.com/k-kuroguro/rust-gobblet.git#72c070f06cce75db11ae69f407dab3ce270a43f0"
+source = "git+https://github.com/k-kuroguro/rust-gobblet.git#6a80b4d5a2581105368d3e1c0f0f61246c37b72a"
 
 [[package]]
 name = "gobblet_gui"

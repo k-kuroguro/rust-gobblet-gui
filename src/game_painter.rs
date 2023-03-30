@@ -3,7 +3,7 @@ use eframe::{
    epaint::{CircleShape, RectShape},
 };
 use egui::{pos2, vec2, Id, Rect, Response, Rounding, Sense, Shape, Ui};
-use gobblet::{board::Board, color::Color, game::Game, piece::Piece, square::Square};
+use gobblet::{Board, Color, Game, Piece, Square};
 
 use crate::style::Style;
 
@@ -92,9 +92,9 @@ impl<'a> GamePainter<'a> {
 
       for (i, set) in game.board().into_iter().enumerate() {
          if let Some(&piece) = set.peek() {
-            let Piece { color, kind } = piece;
+            let Piece { color, size } = piece;
             let center = self.to_screen * pos2((i % 4) as f32 + 0.5, (i / 4) as f32 + 1.5);
-            let radius = 0.5 * self.style.piece_radius_ratio[kind as usize] * self.square_size;
+            let radius = 0.5 * self.style.piece_radius_ratio[size as usize] * self.square_size;
 
             if self
                .ui
@@ -146,7 +146,7 @@ impl<'a> GamePainter<'a> {
       for (i, hand) in Color::ALL.map(|color| game.hand(color)).iter().enumerate() {
          for (j, set) in hand.into_iter().enumerate() {
             if let Some(&piece) = set.peek() {
-               let Piece { color, kind } = piece;
+               let Piece { color, size } = piece;
                let center = self.to_screen
                   * pos2(
                      j as f32 + 1.,
@@ -156,7 +156,7 @@ impl<'a> GamePainter<'a> {
                         Board::SIZE as f32 + 1.5
                      },
                   );
-               let radius = 0.5 * self.style.piece_radius_ratio[kind as usize] * self.square_size;
+               let radius = 0.5 * self.style.piece_radius_ratio[size as usize] * self.square_size;
 
                if self
                   .ui

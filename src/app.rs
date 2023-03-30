@@ -1,15 +1,10 @@
 use eframe::{emath::RectTransform, CreationContext};
 use egui::{vec2, Align2, CentralPanel, Context, Pos2, Rect, Sense, Vec2};
-use gobblet::{
-   board::Board,
-   game::{Action, Game, Status},
-   square::Square,
-};
+use gobblet::{Action, Board, Game, Square, Status};
 
 use crate::game_painter::{GamePainter, LocatedPiece, Location};
 
 const SQUARE_NUM: Vec2 = vec2(Board::SIZE as f32, Board::SIZE as f32 + 2.);
-
 pub struct App {
    game: Game,
    selected_piece: Option<LocatedPiece>,
@@ -47,7 +42,7 @@ impl App {
    }
 
    fn try_select(&mut self, clicked_piece: LocatedPiece) {
-      if clicked_piece.piece.color == *self.game.turn() {
+      if clicked_piece.piece.color == self.game.turn() {
          self.selected_piece = Some(clicked_piece);
       }
    }
@@ -120,7 +115,7 @@ impl eframe::App for App {
 
          painter.paint_available_moves(&self.game, self.selected_piece);
 
-         if *self.game.status() != Status::OnGoing {
+         if self.game.status() != Status::OnGoing {
             let title = match self.game.status() {
                Status::OnGoing => unreachable!(),
                Status::BlackWins => "Black Wins!",
